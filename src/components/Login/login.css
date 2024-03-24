@@ -1,0 +1,14 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.btn-login {
+    text-decoration: none;
+    border: 1px solid black;
+    padding: 2rem 5rem;
+    background-color: black;
+    color: white;
+}

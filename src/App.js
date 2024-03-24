@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import Login from './Login';
-import { getTokenFromUrl } from './spotify';
+import Login from './components/Login/Login';
+import { getTokenFromUrl } from './components/Spotify/spotify';
 import SpotifyWebApi from 'spotify-web-api-js'
+import Player from './components/Player/Player';
 
 const spotify = new SpotifyWebApi()
 
 function App() {
   const [token, setToken] = useState()
+  const [songs, setSongs] = useState()
+  const [appStarted, setAppStarted] = useState(false)
 
-  console.log('env', process.env.REACT_APP_CLIENT_ID)
+  // console.log('songs', songs)
 
   useEffect(() => {
     const hash = getTokenFromUrl()
@@ -20,12 +23,12 @@ function App() {
       setToken(_token)
       spotify.setAccessToken(_token)
     }
-
-    console.log("token", token)
   }, [])
 
-  if (token) {
-    fetch(`https://api.spotify.com/v1/playlists/${process.env.REACT_APP_PLAYLIST}`, {
+  // GETting liked songs
+  if (token && !appStarted) {
+    setAppStarted(true)
+    fetch(`https://api.spotify.com/v1/me/tracks`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -33,14 +36,15 @@ function App() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data)
+      setSongs(data.items)
+      console.log('songs', songs)
     })
     .catch(err => console.log('error', err))
   }
 
   return (
     <div className="App">
-      {token ? <h1>Logged in</h1> : <Login />}
+      {songs ? <Player songs={songs} token={token}/> : ( token ? <h1 className='login'>Loading...</h1> : <Login />)}
     </div>
   );
 }
