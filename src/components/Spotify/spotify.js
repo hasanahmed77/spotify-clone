@@ -1,5 +1,6 @@
 export const authEndpoint = "https://accounts.spotify.com/authorize"
-const redirectURI = "http://localhost:3000/"
+// const redirectURI = "http://localhost:3000/"
+const redirectURI = "https://spotify-clone-pi-ivory.vercel.app/"
 const clientID = process.env.REACT_APP_CLIENT_ID
 const scopes = [
     "user-read-currently-playing",
